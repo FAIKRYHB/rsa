@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>623</width>
+    <height>549</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="SifDesif">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>260</y>
+      <width>71</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Šifrovat</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="Input">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>60</y>
+      <width>345</width>
+      <height>180</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="Output">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>330</y>
+      <width>345</width>
+      <height>180</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="SwitchSifDes">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>270</y>
+      <width>131</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Přepnout na dešifrování</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="keyN">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>140</y>
+      <width>30</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="maxLength">
+     <number>1</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="keyD">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>140</y>
+      <width>30</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="maxLength">
+     <number>1</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="randomKey">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>170</y>
+      <width>70</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Vygenerovat</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_InKey">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>100</y>
+      <width>70</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Veřejný klíč</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="OUTkeyN">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>410</y>
+      <width>30</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="keyD_2">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>410</y>
+      <width>30</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_OutKey">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>370</y>
+      <width>70</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Soukromý klíč</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_n">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>120</y>
+      <width>30</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>n</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_InDE">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>120</y>
+      <width>30</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>e</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_OutDE">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>390</y>
+      <width>30</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>e</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_n_2">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>390</y>
+      <width>30</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>n</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>40</y>
+      <width>345</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Vstup</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>310</y>
+      <width>345</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Výstup</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>Input</tabstop>
+  <tabstop>keyN</tabstop>
+  <tabstop>keyD</tabstop>
+  <tabstop>randomKey</tabstop>
+  <tabstop>SifDesif</tabstop>
+  <tabstop>SwitchSifDes</tabstop>
+  <tabstop>Output</tabstop>
+  <tabstop>keyD_2</tabstop>
+  <tabstop>OUTkeyN</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
