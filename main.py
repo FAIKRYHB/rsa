@@ -54,7 +54,8 @@ class RSA(QMainWindow, Ui_MainWindow):
         print(self.e)
         self.d = 0
         print("DONE!!!")
-        
+        self.keyN.setText(self.n)
+        self.keyD.setText(self.d)
         
     def ChoosePrime(primes):
         return random.choice(primes);
