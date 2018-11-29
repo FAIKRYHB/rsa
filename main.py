@@ -35,7 +35,7 @@ class RSA(QMainWindow, Ui_MainWindow):
     
     
     def GenerateKeys(self):
-        print("Generujeme")
+        print("Generaujeme")
         self.p = RSA.GeneratePrimes(10**16,10**17-1)
         
         self.q = RSA.GeneratePrimes(10**16,10**17-1)
@@ -57,9 +57,9 @@ class RSA(QMainWindow, Ui_MainWindow):
         print(self.n)
         print(self.d)
         self.keyN.setText(str(self.n))
-        self.keyN2.setText(str(self.n))
+        self.OUTkeyN.setText(str(self.n))
         self.keyD.setText(str(self.e))
-        self.keyD2.setText(str(self.d))
+        self.keyD_2.setText(str(self.d))
     
     def GeneratePrimes(fromNumber, toNumber):
         number = random.randint(fromNumber,toNumber)
@@ -106,6 +106,7 @@ class RSA(QMainWindow, Ui_MainWindow):
             self.mode=True
     def sifrovat(self):
         print("Sifrovat")
+        
     def desifrovat(self):
         print("Desifrovat")
     def run(self):
