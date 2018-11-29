@@ -44,7 +44,8 @@ class RSA(QMainWindow, Ui_MainWindow):
             self.e = RSA.GeneratePrime(2,self.fi-1)
         
         self.d = 0
-        
+        self.keyN.setText(self.n)
+        self.keyD.setText(self.d)
         
         
         
