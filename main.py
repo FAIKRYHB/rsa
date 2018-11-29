@@ -90,6 +90,7 @@ class RSA(QMainWindow, Ui_MainWindow):
     def switchmode(self):
         if self.mode:
             self.SifDesif.setText("Dešifrovat")
+            self.label_OutKey.setText("Veřejný klíč")
             self.label_InKey.setText("Soukromý klíč")
             self.label_InDE.setText("d")
             self.label_OutDE.setText("e")
@@ -97,7 +98,8 @@ class RSA(QMainWindow, Ui_MainWindow):
             self.mode=False
         else:
             self.SifDesif.setText("Šifrovat")
-            self.label_OutKey.setText("Veřejný klíč")
+            self.label_OutKey.setText("Soukromý klíč")
+            self.label_InKey.setText("Veřejný klíč")
             self.label_InDE.setText("e")
             self.label_OutDE.setText("d")
             self.randomKey.setEnabled(True)
