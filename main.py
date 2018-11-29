@@ -20,7 +20,6 @@
 # Výstup bude soubor bloků čísel.
 import random
 import math
-from fractions import gcd
 
 import sys
 
@@ -34,23 +33,38 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 class RSA(QMainWindow, Ui_MainWindow):
     mode=True #true sifrovat
     
+    
     def GenerateKeys(self):
-        self.p = RSA.GeneratePrime(10**16,10**17-1)
-        self.q = RSA.GeneratePrime(10**16,10**17-1)
+        print("Generujeme")
+        self.p = RSA.GeneratePrimes(10**16,10**17-1)
+        print(self.p)
+        self.q = RSA.GeneratePrimes(10**16,10**17-1)
+        while(self.p == self.q):
+            self.q = RSA.GeneratePrimes(10**16,10**17-1)
+        print(self.q)
         self.n = self.p*self.q
+        print(self.n)
         self.fi = (self.p - 1)*(self.q-1)
-        self.e = 0
-        while (gcd(self.e,self.fi) != 1):
-            self.e = RSA.GeneratePrime(2,self.fi-1)
-        
+        print(self.fi)
+        self.e =random.randint(2,self.fi-1)
+        print(self.e)
+        while (math.gcd(self.e,self.fi) != 1):
+            print(self.e)
+            self.e = random.randint(2,self.fi-1)
+        print(self.e)
         self.d = 0
+        print("DONE!!!")
         
         
-        
-        
-    def GeneratePrime(fromNumber,toNumber):
-        primes = [i for i in range(fromNumber,toNumber) if RSA.isPrime(i)]
+    def ChoosePrime(primes):
         return random.choice(primes);
+    
+    def GeneratePrimes(fromNumber, toNumber):
+        number = random.randint(fromNumber,toNumber)
+        while(not RSA.isPrime(number)):
+            number = random.randint(fromNumber,toNumber)
+        
+        return number
     
     def isPrime(n):
         if n % 2 == 0 and n > 2: 
@@ -75,7 +89,10 @@ class RSA(QMainWindow, Ui_MainWindow):
             self.label_OutDE.setText("d")
             self.randomKey.setEnabled(True)
             self.mode=True
-    
+    def sifrovat(self):
+        print("Sifrovat")
+    def desifrovat(self):
+        print("Desifrovat")
     def run(self):
         if self.mode:
             self.sifrovat
@@ -86,12 +103,11 @@ class RSA(QMainWindow, Ui_MainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
-        
         self.setupUi(self)
         
         self.SifDesif.clicked.connect(self.run)
         self.SwitchSifDes.clicked.connect(self.switchmode)
-        self.randomKey.clicked.connect(self.randomisekey)
+        self.randomKey.clicked.connect(self.GenerateKeys)
     
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
