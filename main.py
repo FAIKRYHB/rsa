@@ -37,28 +37,29 @@ class RSA(QMainWindow, Ui_MainWindow):
     def GenerateKeys(self):
         print("Generujeme")
         self.p = RSA.GeneratePrimes(10**16,10**17-1)
-        print(self.p)
+        
         self.q = RSA.GeneratePrimes(10**16,10**17-1)
         while(self.p == self.q):
             self.q = RSA.GeneratePrimes(10**16,10**17-1)
-        print(self.q)
-        self.n = self.p*self.q
-        print(self.n)
-        self.fi = (self.p - 1)*(self.q-1)
-        print(self.fi)
-        self.e =random.randint(2,self.fi-1)
-        print(self.e)
-        while (math.gcd(self.e,self.fi) != 1):
-            print(self.e)
-            self.e = random.randint(2,self.fi-1)
-        print(self.e)
-        self.d = 0
-        print("DONE!!!")
-        self.keyN.setText(self.n)
-        self.keyD.setText(self.d)
         
-    def ChoosePrime(primes):
-        return random.choice(primes);
+        self.n = self.p*self.q
+       
+        self.fi = (self.p - 1)*(self.q-1)
+       
+        self.e =random.randint(2,self.fi-1)
+        while (math.gcd(self.e,self.fi) != 1):
+            
+            self.e = random.randint(2,self.fi-1)
+        
+        self.d = RSA.modinv(self.e,self.fi)
+        
+        print("DONE!!!")
+        print(self.n)
+        print(self.d)
+        self.keyN.setText(str(self.n))
+        self.keyN2.setText(str(self.n))
+        self.keyD.setText(str(self.e))
+        self.keyD2.setText(str(self.d))
     
     def GeneratePrimes(fromNumber, toNumber):
         number = random.randint(fromNumber,toNumber)
@@ -66,6 +67,17 @@ class RSA(QMainWindow, Ui_MainWindow):
             number = random.randint(fromNumber,toNumber)
         
         return number
+    def egcd(a, b):
+        if a == 0:
+            return (b, 0, 1)
+        g, y, x = RSA.egcd(b%a,a)
+        return (g, x - (b//a) * y, y)
+
+    def modinv(a, m):
+        g, x, y = RSA.egcd(a, m)
+        if g != 1:
+            raise Exception('No modular inverse')
+        return x%m
     
     def isPrime(n):
         if n % 2 == 0 and n > 2: 
