@@ -1,4 +1,5 @@
-<<<<<<< HEAD
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 ## Klíče
 # 1. p,q => prvočísla 1*10^16.... 9.9....
 # 2. n = p*q
@@ -21,8 +22,17 @@ import random
 import math
 from fractions import gcd
 
-class RSA():
-    
+import sys
+
+from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QFileDialog
+from PyQt5 import QtGui, uic
+
+qtCreatorFile = "dialog.ui"
+
+Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+
+class RSA(QMainWindow, Ui_MainWindow):
+    mode=True #true sifrovat
     
     def GenerateKeys(self):
         self.p = RSA.GeneratePrime(10**16,10**17-1)
@@ -49,31 +59,6 @@ class RSA():
             if n % i == 0:
                 return False
         return True
-    
-rsa = RSA()
-rsa.GenerateKeys()
-print(rsa.p)
-print(rsa.q)
-print(rsa.n)
-print(rsa.fi)
-print(rsa.e)
-
-=======
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-import sys
-
-from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QFileDialog
-from PyQt5 import QtGui, uic
-
-qtCreatorFile = "dialog.ui"
-
-Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
-
-class rsa(QMainWindow, Ui_MainWindow):
-    
-    mode=True #true sifrovat
     
     def switchmode(self):
         if self.mode:
@@ -111,9 +96,18 @@ class rsa(QMainWindow, Ui_MainWindow):
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
     
+#rsa = RSA()
+#rsa.GenerateKeys()
+#print(rsa.p)
+#print(rsa.q)
+#print(rsa.n)
+#print(rsa.fi)
+#print(rsa.e)
+
+
+    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = rsa()
+    window = RSA()
     window.show()
     sys.exit(app.exec_())
->>>>>>> 0bc4a497a74471ba3d175e50a83be622ee8216ae
