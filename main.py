@@ -33,7 +33,7 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 class RSA(QMainWindow, Ui_MainWindow):
     mode=True #true sifrovat
     
-    
+
     def GenerateKeys(self):
         print("Generaujeme")
         self.p = RSA.GeneratePrimes(10**16,10**17-1)
@@ -56,7 +56,7 @@ class RSA(QMainWindow, Ui_MainWindow):
         print("DONE!!!")
         print(self.n)
         print(self.d)
-        self.keyN.setText(str(self.n))
+       self.keyN.setText(str(self.n))
         self.OUTkeyN.setText(str(self.n))
         self.keyD.setText(str(self.e))
         self.keyD_2.setText(str(self.d))
@@ -104,22 +104,44 @@ class RSA(QMainWindow, Ui_MainWindow):
             self.label_OutDE.setText("d")
             self.randomKey.setEnabled(True)
             self.mode=True
+    def encrypt_block(self,m):
+        print(m)
+        print(self.e)
+        print(self.n)
+        c = self.modinv(m**self.e,self.n)
+        if c == None: print("NOOOO!")
+        print(c)
+        return c
+    def decrypt_block(self,c):
+        m = self.modinv(c**self.e,self.n)
+        if m == None: print("Noooo!")
+        return m
+    
     def sifrovat(self):
         print("Sifrovat")
+        string = "String" #doplnit input
+        result  = ''.join([chr(self.encrypt_block(ord(x))) for x in string])
+       
+        # ... Zobrazit result
+        
         
     def desifrovat(self):
         print("Desifrovat")
+        string = "Something" # doplnit input
+         result  = ''.join([chr(self.decrypt_block(ord(x))) for x in string])
+         # ... Zobrazit result
+        
     def run(self):
         if self.mode:
-            self.sifrovat
+            self.sifrovat()
         else:
-            self.desifrovat
+            self.desifrovat()
     
     
     def __init__(self):
-        QMainWindow.__init__(self)
+       QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
-        self.setupUi(self)
+       self.setupUi(self)
         
         self.SifDesif.clicked.connect(self.run)
         self.SwitchSifDes.clicked.connect(self.switchmode)
@@ -127,6 +149,8 @@ class RSA(QMainWindow, Ui_MainWindow):
     
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
+        #self.GenerateKeys()
+        #self.sifrovat()
     
 #rsa = RSA()
 #rsa.GenerateKeys()
