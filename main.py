@@ -32,7 +32,9 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
 class RSA(QMainWindow, Ui_MainWindow):
     mode=True #true sifrovat
-    
+    e=0 #bez toho to v encrypt_block řvalo že nemůže najít self.e v RSA
+    d=0
+    n=0
 
     def GenerateKeys(self):
         print("Generaujeme")
@@ -56,7 +58,7 @@ class RSA(QMainWindow, Ui_MainWindow):
         print("DONE!!!")
         print(self.n)
         print(self.d)
-       self.keyN.setText(str(self.n))
+        self.keyN.setText(str(self.n))
         self.OUTkeyN.setText(str(self.n))
         self.keyD.setText(str(self.e))
         self.keyD_2.setText(str(self.d))
@@ -119,17 +121,18 @@ class RSA(QMainWindow, Ui_MainWindow):
     
     def sifrovat(self):
         print("Sifrovat")
-        string = "String" #doplnit input
+        string = self.Input.toPlainText() #doplnit input
         result  = ''.join([chr(self.encrypt_block(ord(x))) for x in string])
-       
+        self.Output.setText(result)
         # ... Zobrazit result
         
         
     def desifrovat(self):
         print("Desifrovat")
-        string = "Something" # doplnit input
-         result  = ''.join([chr(self.decrypt_block(ord(x))) for x in string])
-         # ... Zobrazit result
+        string = self.Input.toPlainText() # doplnit input
+        result  = ''.join([chr(self.decrypt_block(ord(x))) for x in string])
+        self.Output.setText(result)
+        # ... Zobrazit result
         
     def run(self):
         if self.mode:
@@ -139,9 +142,9 @@ class RSA(QMainWindow, Ui_MainWindow):
     
     
     def __init__(self):
-       QMainWindow.__init__(self)
+        QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
-       self.setupUi(self)
+        self.setupUi(self)
         
         self.SifDesif.clicked.connect(self.run)
         self.SwitchSifDes.clicked.connect(self.switchmode)
