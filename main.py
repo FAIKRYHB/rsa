@@ -36,11 +36,11 @@ class RSA(QMainWindow, Ui_MainWindow):
 
     def GenerateKeys(self):
         print("Generaujeme")
-        self.p = RSA.GeneratePrimes(10**16,10**17-1)
+        self.p = RSA.GeneratePrimes(pow(10,16),pow(10,17)-1)
         
-        self.q = RSA.GeneratePrimes(10**16,10**17-1)
+        self.q = RSA.GeneratePrimes(pow(10,16),pow(10,17)-1)
         while(self.p == self.q):
-            self.q = RSA.GeneratePrimes(10**16,10**17-1)
+            self.q = RSA.GeneratePrimes(pow(10,16),pow(10,17)-1)
         
         self.n = self.p*self.q
        
@@ -108,12 +108,12 @@ class RSA(QMainWindow, Ui_MainWindow):
         print(m)
         print(self.e)
         print(self.n)
-        c = self.modinv(m**self.e,self.n)
+        c = self.modinv(pow(m,self.e),self.n)
         if c == None: print("NOOOO!")
         print(c)
         return c
     def decrypt_block(self,c):
-        m = self.modinv(c**self.e,self.n)
+        m = self.modinv(pow(c,self.e),self.n)
         if m == None: print("Noooo!")
         return m
     
