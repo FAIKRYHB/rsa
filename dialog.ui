@@ -65,7 +65,7 @@
      <rect>
       <x>400</x>
       <y>90</y>
-      <width>180</width>
+      <width>225</width>
       <height>20</height>
      </rect>
     </property>
@@ -81,7 +81,7 @@
      <rect>
       <x>400</x>
       <y>140</y>
-      <width>180</width>
+      <width>225</width>
       <height>20</height>
      </rect>
     </property>
@@ -95,9 +95,9 @@
    <widget class="QPushButton" name="randomKey">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>513</x>
       <y>50</y>
-      <width>70</width>
+      <width>112</width>
       <height>23</height>
      </rect>
     </property>
@@ -110,7 +110,7 @@
      <rect>
       <x>400</x>
       <y>50</y>
-      <width>91</width>
+      <width>112</width>
       <height>21</height>
      </rect>
     </property>
@@ -126,7 +126,7 @@
      <rect>
       <x>400</x>
       <y>360</y>
-      <width>180</width>
+      <width>225</width>
       <height>20</height>
      </rect>
     </property>
@@ -145,7 +145,7 @@
      <rect>
       <x>400</x>
       <y>410</y>
-      <width>180</width>
+      <width>225</width>
       <height>20</height>
      </rect>
     </property>
@@ -164,7 +164,7 @@
      <rect>
       <x>400</x>
       <y>320</y>
-      <width>180</width>
+      <width>225</width>
       <height>21</height>
      </rect>
     </property>
@@ -180,7 +180,7 @@
      <rect>
       <x>400</x>
       <y>70</y>
-      <width>180</width>
+      <width>225</width>
       <height>16</height>
      </rect>
     </property>
@@ -196,7 +196,7 @@
      <rect>
       <x>400</x>
       <y>120</y>
-      <width>180</width>
+      <width>225</width>
       <height>16</height>
      </rect>
     </property>
@@ -212,7 +212,7 @@
      <rect>
       <x>400</x>
       <y>390</y>
-      <width>180</width>
+      <width>225</width>
       <height>16</height>
      </rect>
     </property>
@@ -228,7 +228,7 @@
      <rect>
       <x>400</x>
       <y>340</y>
-      <width>180</width>
+      <width>225</width>
       <height>16</height>
      </rect>
     </property>
