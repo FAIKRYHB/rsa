@@ -37,55 +37,75 @@ class RSA(QMainWindow, Ui_MainWindow):
     n=0
 
     def GenerateKeys(self):
-        print("Generaujeme")
-        self.p = RSA.GeneratePrimes(pow(10,16),pow(10,17)-1)
+        print("Generujeme")
+        p = RSA.GeneratePrimes(10**16,(10**17))
         
-        self.q = RSA.GeneratePrimes(pow(10,16),pow(10,17)-1)
-        while(self.p == self.q):
-            self.q = RSA.GeneratePrimes(pow(10,16),pow(10,17)-1)
+        q = RSA.GeneratePrimes(10**16,(10**17))
+        while(p == q):
+            q = RSA.GeneratePrimes(10**16,(10**17))
         
-        self.n = self.p*self.q
+        n = p*q
        
-        self.fi = (self.p - 1)*(self.q-1)
+        fi = (p - 1)*(q-1)
        
-        self.e =random.randint(2,self.fi-1)
-        while (math.gcd(self.e,self.fi) != 1):
-            
-            self.e = random.randint(2,self.fi-1)
+        e =random.randrange(2,fi)
+        g = math.gcd(e,fi)
+        while (g != 1):
+            e = random.randrange(2,fi)
+            g = math.gcd(e,fi)
         
-        self.d = RSA.modinv(self.e,self.fi)
+        print(e)
+        d = RSA.multiplicativeInverse(e,fi)
+        
+        self.n = n
+        self.e = e
+        self.d = d
+        #self.d = RSA.modinv(self.e,self.fi)
         
         print("DONE!!!")
-        print(self.n)
-        print(self.d)
         self.keyN.setText(str(self.n))
         self.OUTkeyN.setText(str(self.n))
         self.keyD.setText(str(self.e))
         self.keyD_2.setText(str(self.d))
     
     def GeneratePrimes(fromNumber, toNumber):
-        number = random.randint(fromNumber,toNumber)
+        number = random.randrange(fromNumber,toNumber)
         while(not RSA.isPrime(number)):
-            number = random.randint(fromNumber,toNumber)
+            number = random.randrange(fromNumber,toNumber)
         
         return number
+    def multiplicativeInverse(a, b):
+        x = 0
+        y = 1
+        lx = 1
+        ly = 0
+        oa = a  # Remember original a/b to remove
+        ob = b  # negative values from return results
+        while b != 0:
+            q = a // b
+            (a, b) = (b, a % b)
+            (x, lx) = ((lx - (q * x)), x)
+            (y, ly) = ((ly - (q * y)), y)
+        if lx < 0:
+            lx += ob  # If neg wrap modulo orignal b
+        if ly < 0:
+            ly += oa  # If neg wrap modulo orignal a
+        # return a , lx, ly  # Return only positive values
+        return lx
+
     def egcd(a, b):
         if a == 0:
             return (b, 0, 1)
         g, y, x = RSA.egcd(b%a,a)
         return (g, x - (b//a) * y, y)
-
-    def modinv(a, m):
-        g, x, y = RSA.egcd(a, m)
-        if g != 1:
-            raise Exception('No modular inverse')
-        return x%m
     
-    def isPrime(n):
-        if n % 2 == 0 and n > 2: 
+    def isPrime(num):
+        if num == 2:
+            return True
+        if num < 2 or num % 2 == 0:
             return False
-        for i in range(3, int(math.sqrt(n)) + 1, 2):
-            if n % i == 0:
+        for n in range(3, int(num**0.5)+2, 2):
+            if num % n == 0:
                 return False
         return True
     
@@ -110,19 +130,33 @@ class RSA(QMainWindow, Ui_MainWindow):
         print(m)
         print(self.e)
         print(self.n)
-        c = self.modinv(pow(m,self.e),self.n)
+        c = pow(m,self.e,self.n)
         if c == None: print("NOOOO!")
         print(c)
         return c
     def decrypt_block(self,c):
-        m = self.modinv(pow(c,self.e),self.n)
+        m = pow(c,self.e,self.n)
         if m == None: print("Noooo!")
         return m
+    def getBlocked(string,size):
+        result = []
+        for i in range(0,len(string),int(size)):
+            block = string[i:i*int(size)]
+            print(block)
+            biteString = ""
+            
+            for char in block:
+                biteString += str((10-len(str(bin(ord(char)))[2:]))*'0'+(str(bin(ord(char)))[2:]))
+                
+            result.append(str(int(biteString,2))) 
+        return result
     
     def sifrovat(self):
         print("Sifrovat")
         string = self.Input.toPlainText() #doplnit input
-        result  = ''.join([chr(self.encrypt_block(ord(x))) for x in string])
+        blocked = RSA.getBlocked(string,7)
+        result = ''.join(map(lambda x: str(x), str([(( block ** self.e) % self.n) for block in blocked])));
+        #result  = ''.join([chr(self.encrypt_block(ord(x))) for x in string])
         self.Output.setText(result)
         # ... Zobrazit result
         
