@@ -21,6 +21,8 @@
 import random
 import math
 
+from random import randrange
+
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QFileDialog
@@ -38,11 +40,11 @@ class RSA(QMainWindow, Ui_MainWindow):
 
     def GenerateKeys(self):
         print("Generujeme")
-        p = RSA.GeneratePrimes(10**16,(10**17))
+        p = RSA.GeneratePrimes(10)
         
-        q = RSA.GeneratePrimes(10**16,(10**17))
+        q = RSA.GeneratePrimes(10)
         while(p == q):
-            q = RSA.GeneratePrimes(10**16,(10**17))
+            q = RSA.GeneratePrimes(10)
         
         n = p*q
        
@@ -68,12 +70,18 @@ class RSA(QMainWindow, Ui_MainWindow):
         self.keyD.setText(str(self.e))
         self.keyD_2.setText(str(self.d))
     
-    def GeneratePrimes(fromNumber, toNumber):
-        number = random.randrange(fromNumber,toNumber)
-        while(not RSA.isPrime(number)):
-            number = random.randrange(fromNumber,toNumber)
-        
-        return number
+
+    def GeneratePrimes(k):
+         #k is the desired bit length
+         r = 100*(math.log(k,2)+1) #number of attempts max
+         while r>0:
+            #randrange is mersenne twister and is completely deterministic
+            #unusable for serious crypto purposes
+            n = random.randrange(2**(k-1),2**(k))
+            r -= 1
+            if RSA.isPrime(n) == True:
+                return n
+    
     def multiplicativeInverse(a, b):
         x = 0
         y = 1
@@ -87,10 +95,9 @@ class RSA(QMainWindow, Ui_MainWindow):
             (x, lx) = ((lx - (q * x)), x)
             (y, ly) = ((ly - (q * y)), y)
         if lx < 0:
-            lx += ob  # If neg wrap modulo orignal b
+            lx += ob 
         if ly < 0:
-            ly += oa  # If neg wrap modulo orignal a
-        # return a , lx, ly  # Return only positive values
+            ly += oa  
         return lx
 
     def egcd(a, b):
@@ -99,15 +106,56 @@ class RSA(QMainWindow, Ui_MainWindow):
         g, y, x = RSA.egcd(b%a,a)
         return (g, x - (b//a) * y, y)
     
-    def isPrime(num):
-        if num == 2:
-            return True
-        if num < 2 or num % 2 == 0:
-            return False
-        for n in range(3, int(num**0.5)+2, 2):
-            if num % n == 0:
+    def rabinMiller(n, k=10):
+        if n == 2:
+                return True
+        if not n & 1:
                 return False
+    
+        def check(a, s, d, n):
+                x = pow(a, d, n)
+                if x == 1:
+                        return True
+                for i in range(1, s - 1):
+                        if x == n - 1:
+                                return True
+                        x = pow(x, 2, n)
+                return x == n - 1
+    
+        s = 0
+        d = n - 1
+    
+        while d % 2 == 0:
+                d >>= 1
+                s += 1
+    
+        for i in range(1, k):
+                a = randrange(2, n - 1)
+                if not check(a, s, d, n):
+                        return False
         return True
+
+    def isPrime(n):
+         lowPrimes =   [3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97
+                       ,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179
+                       ,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269
+                       ,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367
+                       ,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461
+                       ,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571
+                       ,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661
+                       ,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773
+                       ,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883
+                       ,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997]
+         if (n >= 3):
+             if (n&1 != 0):
+                 for p in lowPrimes:
+                     if (n == p):
+                        return True
+                     if (n % p == 0):
+                         return False
+                 return rabinMiller(n)
+         return False
+
     
     def switchmode(self):
         if self.mode:
@@ -134,39 +182,38 @@ class RSA(QMainWindow, Ui_MainWindow):
         if c == None: print("NOOOO!")
         print(c)
         return c
-    def decrypt_block(self,c):
-        m = pow(c,self.e,self.n)
-        if m == None: print("Noooo!")
-        return m
+
     def getBlocked(string,size):
         result = []
-        for i in range(0,len(string),int(size)):
-            block = string[i:i*int(size)]
+        for i in range(0,math.ceil(len(string)/int(size))):
+            if len(string) < (i*size):
+                block = string[int(i*(size)):int(len(string)-1)]
+            else:
+                block = string[int(i*(size)):int(((i+1)*size)-1)]
+            
             print(block)
             biteString = ""
             
             for char in block:
                 biteString += str((10-len(str(bin(ord(char)))[2:]))*'0'+(str(bin(ord(char)))[2:]))
-                
-            result.append(str(int(biteString,2))) 
+            print(biteString);
+            if(biteString != ''):
+                result.append(str(int(str(biteString),2))) 
         return result
     
     def sifrovat(self):
         print("Sifrovat")
         string = self.Input.toPlainText() #doplnit input
-        blocked = RSA.getBlocked(string,7)
-        result = ''.join(map(lambda x: str(x), str([(( block ** self.e) % self.n) for block in blocked])));
-        #result  = ''.join([chr(self.encrypt_block(ord(x))) for x in string])
-        self.Output.setText(result)
-        # ... Zobrazit result
+        cipher = [str((ord(char) ** self.e) % self.n) for char in string]
+        self.Output.setText(" ".join(cipher))
         
         
     def desifrovat(self):
         print("Desifrovat")
-        string = self.Input.toPlainText() # doplnit input
-        result  = ''.join([chr(self.decrypt_block(ord(x))) for x in string])
-        self.Output.setText(result)
-        # ... Zobrazit result
+        inp = self.Input.toPlainText().split(" ")
+        plain = [chr((int(char) ** self.d) % self.n) for char in inp]
+         
+        self.Output.setText("".join(plain))
         
     def run(self):
         if self.mode:
@@ -186,16 +233,7 @@ class RSA(QMainWindow, Ui_MainWindow):
     
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
-        #self.GenerateKeys()
-        #self.sifrovat()
-    
-#rsa = RSA()
-#rsa.GenerateKeys()
-#print(rsa.p)
-#print(rsa.q)
-#print(rsa.n)
-#print(rsa.fi)
-#print(rsa.e)
+
 
 
     
