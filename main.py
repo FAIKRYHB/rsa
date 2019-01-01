@@ -7,7 +7,7 @@
 # 4. 1 < e < Fi(n) : e X Fi(n)  GCD(e, Fí(n)) == 1
 # 5. inverzní modulo e : d => e mod Fí(n) = 1
 
-
+##  713336501923348429570567355419698
 ## Šifrování
 # OT = 'Ahoj pepo'
 # Št = OT^e * mod n
@@ -34,29 +34,26 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
 class RSA(QMainWindow, Ui_MainWindow):
     mode=True #true sifrovat
-    e=0 #bez toho to v encrypt_block řvalo že nemůže najít self.e v RSA
-    d=0
-    n=0
-
+    n = ""
+    d = ""
+    e = ""
     def GenerateKeys(self):
+        keySize = 17
         print("Generujeme")
-        p = RSA.GeneratePrimes(10)
+        p = RSA.GeneratePrimes(keySize)
         
-        q = RSA.GeneratePrimes(10)
+        q = RSA.GeneratePrimes(keySize)
         while(p == q):
-            q = RSA.GeneratePrimes(10)
+            q = RSA.GeneratePrimes(keySize)
         
         n = p*q
        
         fi = (p - 1)*(q-1)
        
-        e =random.randrange(2,fi)
-        g = math.gcd(e,fi)
-        while (g != 1):
-            e = random.randrange(2,fi)
-            g = math.gcd(e,fi)
+        e = random.randrange(1, fi)
         
-        print(e)
+        
+        #print(e)
         d = RSA.multiplicativeInverse(e,fi)
         
         self.n = n
@@ -69,6 +66,7 @@ class RSA(QMainWindow, Ui_MainWindow):
         self.OUTkeyN.setText(str(self.n))
         self.keyD.setText(str(self.e))
         self.keyD_2.setText(str(self.d))
+
     
 
     def GeneratePrimes(k):
@@ -77,11 +75,10 @@ class RSA(QMainWindow, Ui_MainWindow):
          while r>0:
             #randrange is mersenne twister and is completely deterministic
             #unusable for serious crypto purposes
-            n = random.randrange(2**(k-1),2**(k))
+            n = random.randrange(10**(k-1),10**(k))
             r -= 1
             if RSA.isPrime(n) == True:
                 return n
-    
     def multiplicativeInverse(a, b):
         x = 0
         y = 1
@@ -153,7 +150,7 @@ class RSA(QMainWindow, Ui_MainWindow):
                         return True
                      if (n % p == 0):
                          return False
-                 return rabinMiller(n)
+                 return RSA.rabinMiller(n)
          return False
 
     
@@ -166,6 +163,11 @@ class RSA(QMainWindow, Ui_MainWindow):
             self.label_OutDE.setText("e")
             self.randomKey.setEnabled(False)
             self.mode=False
+
+            self.keyD.setText(str(self.d))
+            self.keyD_2.setText(str(self.e))
+
+
         else:
             self.SifDesif.setText("Šifrovat")
             self.label_OutKey.setText("Soukromý klíč")
@@ -174,44 +176,41 @@ class RSA(QMainWindow, Ui_MainWindow):
             self.label_OutDE.setText("d")
             self.randomKey.setEnabled(True)
             self.mode=True
-    def encrypt_block(self,m):
-        print(m)
-        print(self.e)
-        print(self.n)
-        c = pow(m,self.e,self.n)
-        if c == None: print("NOOOO!")
-        print(c)
-        return c
+
+            self.keyD.setText(str(self.e))
+            self.keyD_2.setText(str(self.d))
 
     def getBlocked(string,size):
         result = []
-        for i in range(0,math.ceil(len(string)/int(size))):
-            if len(string) < (i*size):
-                block = string[int(i*(size)):int(len(string)-1)]
-            else:
-                block = string[int(i*(size)):int(((i+1)*size)-1)]
+        
+        for i in range(0,len(string),int(size)):
+            endIndex = (i+int(size))
             
-            print(block)
-            biteString = ""
+            if len(string) <= (i + int(size)):
+                endIndex = len(string)-1
+            
+            block = string[i:endIndex]
+            #print(string[i*int(size):i*int(size)+size])
+            biteString = "1"
             
             for char in block:
-                biteString += str((10-len(str(bin(ord(char)))[2:]))*'0'+(str(bin(ord(char)))[2:]))
-            print(biteString);
-            if(biteString != ''):
-                result.append(str(int(str(biteString),2))) 
+                biteString = biteString + (10-len(str(bin(ord(char)))[2:]))*'0'+(str(bin(ord(char)))[2:])
+           
+            if len(biteString) > 0:
+                result.append(int(biteString,2)) 
+    
         return result
     
     def sifrovat(self):
         print("Sifrovat")
-        string = self.Input.toPlainText() #doplnit input
-        cipher = [str((ord(char) ** self.e) % self.n) for char in string]
-        self.Output.setText(" ".join(cipher))
-        
+        string = self.Input.toPlainText() 
+        cipher = [str(pow(ord(char), self.e, self.n)) for char in string]
+        self.Output.setText(" ".join(cipher))        
         
     def desifrovat(self):
         print("Desifrovat")
         inp = self.Input.toPlainText().split(" ")
-        plain = [chr((int(char) ** self.d) % self.n) for char in inp]
+        plain = [chr(pow(int(char) ,self.d, self.n)) for char in inp]
          
         self.Output.setText("".join(plain))
         
@@ -226,7 +225,12 @@ class RSA(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        
+
+        self.keyN.setText(str(self.n))
+        self.OUTkeyN.setText(str(self.n))
+        self.keyD.setText(str(self.e))
+        self.keyD_2.setText(str(self.d))
+
         self.SifDesif.clicked.connect(self.run)
         self.SwitchSifDes.clicked.connect(self.switchmode)
         self.randomKey.clicked.connect(self.GenerateKeys)
